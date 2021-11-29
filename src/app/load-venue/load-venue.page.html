@@ -1,0 +1,82 @@
+<ion-header class="ion-padding ion-text-center">
+  <ion-toolbar>
+    <ion-title>Cargar Recinto</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
+  <ion-list lines="full">
+    <form [formGroup]="venueForm" (ngSubmit)="onSubmit()">
+      <ion-item lines="none">
+        <ion-label position="floating">ID.</ion-label>
+        <ion-input
+          class="input"
+          formControlName="id"
+          type="text"
+          required
+        ></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Lugar del evento.</ion-label>
+        <ion-select>
+          <ion-select-option *ngFor="let recinto of recintos" [value]="recinto"
+            >{{recinto.placeEvent}}</ion-select-option
+          >
+        </ion-select>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="floating">Nombre del evento.</ion-label>
+        <ion-input
+          class="input"
+          formControlName="nameEvent"
+          type="text"
+          required
+        >
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="floating">Fecha.</ion-label>
+        <ion-item>
+          <ion-label>Fecha </ion-label>
+          <ion-datetime
+            formControlName="dateEvent"
+            displayFormat="D MMM YYYY H:mm"
+            placeholder="Select Date"
+          ></ion-datetime>
+        </ion-item>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="floating">Artistas.</ion-label>
+        <ion-input
+          class="input"
+          formControlName="artistas"
+          type="text"
+          required
+        >
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label position="floating">Tipo de evento.</ion-label>
+        <ion-input
+          class="input"
+          formControlName="typeEvent"
+          type="text"
+          required
+        >
+        </ion-input>
+      </ion-item>
+
+      <ion-row>
+        <ion-col>
+          <ion-button type="submit" color="success" expand="block"
+            >Add</ion-button
+          >
+        </ion-col>
+      </ion-row>
+    </form>
+  </ion-list>
+</ion-content>
