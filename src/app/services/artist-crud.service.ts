@@ -22,7 +22,7 @@ export class ArtistCrudService {
   constructor(private httpClient: HttpClient) {}
 
   createArtist(artist: Artist): Observable<any> {
-    return this.httpClient.post<Artist>('http://localhost:4000/api/create-artist',artist,this.httpOptions)
+    return this.httpClient.post<Artist>('http://sharkathon.one:8182/v1/api/artists',artist,this.httpOptions)
       .pipe(catchError(this.handleError<Artist>('Error occured')));
   }
 
@@ -37,7 +37,7 @@ export class ArtistCrudService {
 
   getArtists(): Observable<Artist[]> {
     return this.httpClient
-      .get<Artist[]>('http://localhost:4000/api/artist')
+      .get<Artist[]>('http://sharkathon.one:8182/v1/api/artists')
       .pipe(
         tap((artists) => console.log('Artists retrieved!')),
         catchError(this.handleError<Artist[]>('Get artist', []))

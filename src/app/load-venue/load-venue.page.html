@@ -1,82 +1,163 @@
-<ion-header class="ion-padding ion-text-center">
+<ion-header [translucent]="true" class="ion-padding ion-text-center">
   <ion-toolbar>
-    <ion-title>Cargar Recinto</ion-title>
+    <ion-title>Cargar Evento</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding ion-text-center">
-  <ion-list lines="full">
+  <ion-list lines= "none">
     <form [formGroup]="venueForm" (ngSubmit)="onSubmit()">
-      <ion-item lines="none">
+      <ion-item >
         <ion-label position="floating">ID.</ion-label>
-        <ion-input
-          class="input"
-          formControlName="id"
-          type="text"
-          required
-        ></ion-input>
+        <ion-input class="input" formControlName="id" type="text" ></ion-input>
       </ion-item>
+
       <ion-item>
         <ion-label position="floating">Lugar del evento.</ion-label>
-        <ion-select>
-          <ion-select-option *ngFor="let recinto of recintos" [value]="recinto"
-            >{{recinto.placeEvent}}</ion-select-option
-          >
+        <ion-select formControlName="placeEvent" (ionChange)="loadInfo()">
+          <ion-select-option *ngFor="let recinto of recintos" [value]="recinto">{{recinto.fairgroundName}}
+          </ion-select-option>
         </ion-select>
       </ion-item>
 
+      <ion-item-divider>
+      </ion-item-divider>
+
+      <ion-item>
+        <ion-list>
+          <ion-item>
+            <ion-label position="floating">ID evento</ion-label>
+            <ion-input class="input" type="text" formControlName="idEvento"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Nombre.</ion-label>
+            <ion-input class="input" type="text" formControlName="nombreRecinto"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Secuencia</ion-label>
+            <ion-input class="input" type="text" formControlName="secuencia"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Codigo Postal</ion-label>
+            <ion-input class="input" type="text" formControlName="codigoPostal"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Latitud</ion-label>
+            <ion-input class="input" type="text" formControlName="latitud"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Altitud</ion-label>
+            <ion-input class="input" type="text" formControlName="altitud"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Direccion</ion-label>
+            <ion-input class="input" type="text" formControlName="direccion"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Numero Externo</ion-label>
+            <ion-input class="input" type="text" formControlName="numeroExterno"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Numero Interno</ion-label>
+            <ion-input class="input" type="text" formControlName="numeroInterno"></ion-input>
+          </ion-item>
+
+
+
+          <ion-row>
+            <ion-col size="10" offset="1">
+              <ion-button type="button" expand="block">Agregar Recinto</ion-button>
+            </ion-col>
+          </ion-row>
+
+        </ion-list>
+      </ion-item>
+
+      <ion-item-divider>
+
+      </ion-item-divider>
+
+
+
       <ion-item lines="none">
         <ion-label position="floating">Nombre del evento.</ion-label>
-        <ion-input
-          class="input"
-          formControlName="nameEvent"
-          type="text"
-          required
-        >
+        <ion-input class="input" formControlName="nameEvent" type="text" required>
         </ion-input>
       </ion-item>
 
       <ion-item lines="none">
-        <ion-label position="floating">Fecha.</ion-label>
-        <ion-item>
-          <ion-label>Fecha </ion-label>
-          <ion-datetime
-            formControlName="dateEvent"
-            displayFormat="D MMM YYYY H:mm"
-            placeholder="Select Date"
-          ></ion-datetime>
-        </ion-item>
+        <ion-label position="floating">Fecha Inicio.</ion-label>
+        <ion-datetime formControlName="dateEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
+          placeholder="Select Date" required>
+        </ion-datetime>
       </ion-item>
 
       <ion-item lines="none">
+        <ion-label position="floating">Fecha Termino.</ion-label>
+        <ion-datetime formControlName="dateEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
+          placeholder="Select Date" required>
+        </ion-datetime>
+      </ion-item>
+
+      <ion-item>
         <ion-label position="floating">Artistas.</ion-label>
-        <ion-input
-          class="input"
-          formControlName="artistas"
-          type="text"
-          required
-        >
-        </ion-input>
+        <ion-select multiple="true">
+          <ion-select-option *ngFor="let artista of artistas" [value]="artista">{{artista.name}}</ion-select-option>
+        </ion-select>
       </ion-item>
+
+
+      <ion-item>
+        <ion-list>
+          <ion-item>
+            <ion-label position="floating">Nombre.</ion-label>
+            <ion-input class="input" type="text"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Descripcion.</ion-label>
+            <ion-input class="input" type="text"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Categoria.</ion-label>
+            <ion-input class="input" type="text"></ion-input>
+          </ion-item>
+
+          <ion-row>
+            <ion-col size="10" offset="1">
+              <ion-button type="button" expand="block">Agregar Artista</ion-button>
+            </ion-col>
+          </ion-row>
+
+        </ion-list>
+      </ion-item>
+      <ion-item-divider>
+
+      </ion-item-divider>
+
+
 
       <ion-item lines="none">
         <ion-label position="floating">Tipo de evento.</ion-label>
-        <ion-input
-          class="input"
-          formControlName="typeEvent"
-          type="text"
-          required
-        >
+        <ion-input class="input" formControlName="typeEvent" type="text" required>
         </ion-input>
       </ion-item>
-
-      <ion-row>
-        <ion-col>
-          <ion-button type="submit" color="success" expand="block"
-            >Add</ion-button
-          >
-        </ion-col>
-      </ion-row>
     </form>
   </ion-list>
+
+  <ion-row>
+    <ion-col size="10" offset="1">
+      <ion-button type="submit" expand="block">Add</ion-button>
+    </ion-col>
+  </ion-row>
+
 </ion-content>

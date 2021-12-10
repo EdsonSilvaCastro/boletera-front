@@ -24,7 +24,7 @@ export class VenueCrudService {
   constructor(private httpClient: HttpClient) {}
 
   createVenue(venue: Venue): Observable<any> {
-    return this.httpClient.post<Venue>('http://localhost:8182/api/event',venue,this.httpOptions)
+    return this.httpClient.post<Venue>('http://sharkathon.one:8182/v1/api/events',venue,this.httpOptions)
       .pipe(catchError(this.handleError<Venue>('Error occured')));
   }
 
@@ -38,7 +38,7 @@ export class VenueCrudService {
   }
 
   getVenues(): Observable<Venue[]> {
-    return this.httpClient.get<Venue[]>('https://venue.free.beeceptor.com/getVenues').pipe(
+    return this.httpClient.get<Venue[]>('http://sharkathon.one:8182/v1/api/events').pipe(
       tap((venues) => console.log('Venues retrieved!')),
       catchError(this.handleError<Venue[]>('Get venue', []))
     );

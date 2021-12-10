@@ -1,7 +1,7 @@
 import { Component, OnInit, NgZone } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { ArtistCrudService } from './../services/artist-crud.service';
 
 @Component({
@@ -19,9 +19,9 @@ export class LoadArtistPage implements OnInit {
     private artistCrudService: ArtistCrudService
   ) {
     this.artistForm = this.formBuilder.group({
-      name: [''],
-      description: [''],
-      category: [''],
+      name: ['', [Validators.required]],
+      description: ['', [Validators.required]],
+      category: ['',[Validators.required]],
     });
   }
 
@@ -35,6 +35,7 @@ export class LoadArtistPage implements OnInit {
         .subscribe((response) => {
           this.zone.run(() => {
             this.artistForm.reset();
+            console.log('ADDED');
             //this.router.navigate(['/load-venue']);
           });
         });
