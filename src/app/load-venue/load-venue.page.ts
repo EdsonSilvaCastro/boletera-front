@@ -7,6 +7,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { VenueCrudService } from './../services/venue-crud.service';
 import { ArtistCrudService } from '../services/artist-crud.service';
 import { FairgroundCrudService } from '../services/fairground-service.service';
+import { CategoryCrudService } from '../services/category-service.service';
 
 @Component({
   selector: 'app-load-venue',
@@ -19,6 +20,7 @@ export class LoadVenuePage implements OnInit {
   //Variables para peticiones.
   recintos: any;
   artistas: any;
+  categories: any;
   info: any;
   //Info del recinto
 
@@ -28,30 +30,46 @@ export class LoadVenuePage implements OnInit {
     private zone: NgZone,
     private venueCrudService: VenueCrudService,
     private artistCrudService: ArtistCrudService,
-    private fairgroundCrudService: FairgroundCrudService
+    private fairgroundCrudService: FairgroundCrudService,
+    private categoryCrudService: CategoryCrudService
   ) {
     this.venueForm = this.formBuilder.group({
-      id: ['', [Validators.required]],
-      placeEvent: ['', [Validators.required]],
-      idEvento: [''],
-      nombreRecinto: [''],
-      secuencia: [''],
-      codigoPostal: [''],
-      latitud: [''],
-      altitud: [''],
-      direccion: [''],
-      numeroExterno: [''],
-      numeroInterno: [''],
-      nameEvent: ['', [Validators.required]],
+      nameArtist: [''],
+      descriptionArtist: [''],
+      categoryArtist: [''],
+      durationInHours:  [''],
+      startHour: [''],
+      weekDay: [''],
+      id: [''],
+      placeEvent: [''],
+      idFairground: [''],
+      fairgroundName: [''],
+      sequence: [''],
+      fairgroundZipCode: [''],
+      fairgroundLatitude: [''],
+      fairgroundLongitud: [''],
+      fairgroundStreet: [''],
+      fairgroundExternalNumber: [''],
+      fairgroundInternalNumber: [''],
+      nameEvent: [''],
       dateEvent: [''],
-      artistas: ['', [Validators.required]],
-      typeEvent: ['', [Validators.required]],
+      artistas: [''],
+      typeEvent: [''],
+      percentageComission: [''],
+      availability: [''],
+      briefDescription: [''],
+      category: [''],
+      cortesyAmount:[''],
+      dateStartEvent:[''],
+      dateEndEvent:['']
+
     });
   }
 
   ngOnInit() {
     this.getRecintos();
     this.getArtistas();
+    this.getCategories();
   }
 
   onSubmit() {
@@ -95,6 +113,21 @@ export class LoadVenuePage implements OnInit {
     );
   }
 
+
+  getCategories(){
+    this.categoryCrudService.getCategories().subscribe(
+      (response) => {
+        console.log('response', response);
+        this.categories = response;
+      },
+      (error) => {
+        console.log('error', error);
+      }
+    );
+
+
+  }
+
   loadInfo() {
     this.info = this.venueForm.value;
 
@@ -110,15 +143,15 @@ export class LoadVenuePage implements OnInit {
 
 
 
-          idEvento: newValues.id,
-          nombreRecinto: newValues.fairgroundName,
-          secuencia: newValues.sequence,
-          codigoPostal: newValues.fairgroundZipCode,
-          latitud: newValues.fairgroundLatitude,
-          altitud: newValues.fairgroundLongitud,
-          direccion: newValues.fairgroundStreet,
-          numeroExterno: newValues.fairgroundExternalNumber,
-          numeroInterno: newValues.fairgroundInternalNumber
+          idFairground: newValues.id,
+          fairgroundName: newValues.fairgroundName,
+          sequence: newValues.sequence,
+          fairgroundZipCode: newValues.fairgroundZipCode,
+          fairgroundLatitude: newValues.fairgroundLatitude,
+          fairgroundLongitud: newValues.fairgroundLongitud,
+          fairgroundStreet: newValues.fairgroundStreet,
+          fairgroundExternalNumber: newValues.fairgroundExternalNumber,
+          fairgroundInternalNumber: newValues.fairgroundInternalNumber
 
 
         });
@@ -127,5 +160,31 @@ export class LoadVenuePage implements OnInit {
         console.log('error', error);
       }
     );
+  }
+
+
+  addNewArtist(){
+
+    const artistForm = this.formBuilder.group({
+      nameArtist: [''],
+      descriptionArtist: [''],
+      categoryArtist: ['']
+    });
+
+    console.log(artistForm.value);
+    if (!artistForm.valid) {
+      return false;
+    } else {
+      this.artistCrudService
+        .createArtist(artistForm.value)
+        .subscribe((response) => {
+          this.zone.run(() => {
+            artistForm.reset();
+            console.log('success');
+          });
+        });
+    }
+
+
   }
 }

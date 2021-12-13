@@ -4,160 +4,268 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" class="ion-padding ion-text-center">
-  <ion-list lines= "none">
-    <form [formGroup]="venueForm" (ngSubmit)="onSubmit()">
-      <ion-item >
-        <ion-label position="floating">ID.</ion-label>
-        <ion-input class="input" formControlName="id" type="text" ></ion-input>
-      </ion-item>
+<ion-content [fullscreen]="true">
+  <div class="mainContainer ion-padding">
+    <div class="formContainer ion-padding">
+      <h1>Ingrese los datos requeridos.</h1>
+      <!---------------------------------------------- MAIN FORM ----------------------------------------------->
+      <form [formGroup]="venueForm" (ngSubmit)="onSubmit()">
+        <ion-item-divider>ARTISTAS</ion-item-divider>
 
-      <ion-item>
-        <ion-label position="floating">Lugar del evento.</ion-label>
-        <ion-select formControlName="placeEvent" (ionChange)="loadInfo()">
-          <ion-select-option *ngFor="let recinto of recintos" [value]="recinto">{{recinto.fairgroundName}}
-          </ion-select-option>
-        </ion-select>
-      </ion-item>
 
-      <ion-item-divider>
-      </ion-item-divider>
 
-      <ion-item>
-        <ion-list>
+        <!---------------------------------------------- APARTADO ARTISTAS ----------------------------------------------->
+        <div class="formInput">
           <ion-item>
-            <ion-label position="floating">ID evento</ion-label>
-            <ion-input class="input" type="text" formControlName="idEvento"></ion-input>
+            <ion-label position="floating">Artistas.</ion-label>
+            <ion-select multiple="true">
+              <ion-select-option *ngFor="let artista of artistas" [value]="artista">{{artista.name}}</ion-select-option>
+            </ion-select>
           </ion-item>
+        </div>
 
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Nombre.</ion-label>
-            <ion-input class="input" type="text" formControlName="nombreRecinto"></ion-input>
+            <ion-input formControlName="nameArtist" type="text"></ion-input>
           </ion-item>
+        </div>
 
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Descripcion.</ion-label>
+            <ion-input formControlName="descriptionArtist" type="text"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Categoria.</ion-label>
+            <ion-input formControlName="categoryArtist" type="text"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="action-button ion-padding">
+          <ion-row>
+            <ion-col size="6" offset="3">
+              <ion-button  expand="block" (click) ="addNewArtist()" >Agregar Artista</ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
+
+        <!---------------------------------------------- END-ARTISTAS----------------------------------------------->
+
+        <ion-item-divider>HORARIO</ion-item-divider>
+
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Duracion en horas.</ion-label>
+            <ion-input formControlName="durationInHours" type="text"></ion-input>
+          </ion-item>
+        </div>
+
+
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Fecha y hora de inicio.</ion-label>
+            <ion-datetime formControlName="startHour" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
+              placeholder="Select Date" required>
+            </ion-datetime>
+          </ion-item>
+        </div>
+
+
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Dia de la semana.</ion-label>
+            <ion-input formControlName="weekDay" type="text"></ion-input>
+          </ion-item>
+        </div>
+
+        <!---------------------------------------------- DATOS RECINTO ----------------------------------------------->
+        <h1> </h1>
+        <ion-item-divider>RECINTO</ion-item-divider>
+
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Lugar del evento.</ion-label>
+            <ion-select formControlName="placeEvent" (ionChange)="loadInfo()">
+              <ion-select-option *ngFor="let recinto of recintos" [value]="recinto">{{recinto.fairgroundName}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
+
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">ID evento</ion-label>
+            <ion-input type="text" formControlName="idFairground"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Nombre.</ion-label>
+            <ion-input type="text" formControlName="fairgroundName"></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Secuencia</ion-label>
-            <ion-input class="input" type="text" formControlName="secuencia"></ion-input>
+            <ion-input type="text" formControlName="sequence"></ion-input>
           </ion-item>
+        </div>
 
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Codigo Postal</ion-label>
-            <ion-input class="input" type="text" formControlName="codigoPostal"></ion-input>
+            <ion-input type="text" formControlName="fairgroundZipCode"></ion-input>
           </ion-item>
+        </div>
 
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Latitud</ion-label>
-            <ion-input class="input" type="text" formControlName="latitud"></ion-input>
+            <ion-input type="text" formControlName="fairgroundLatitude"></ion-input>
           </ion-item>
+        </div>
 
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Altitud</ion-label>
-            <ion-input class="input" type="text" formControlName="altitud"></ion-input>
+            <ion-input type="text" formControlName="fairgroundLongitud"></ion-input>
           </ion-item>
+        </div>
 
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Direccion</ion-label>
-            <ion-input class="input" type="text" formControlName="direccion"></ion-input>
+            <ion-input type="text" formControlName="fairgroundStreet"></ion-input>
           </ion-item>
+        </div>
 
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Numero Externo</ion-label>
-            <ion-input class="input" type="text" formControlName="numeroExterno"></ion-input>
+            <ion-input type="text" formControlName="fairgroundExternalNumber"></ion-input>
           </ion-item>
+        </div>
 
+        <div class="formInput">
           <ion-item>
             <ion-label position="floating">Numero Interno</ion-label>
-            <ion-input class="input" type="text" formControlName="numeroInterno"></ion-input>
+            <ion-input type="text" formControlName="fairgroundInternalNumber"></ion-input>
           </ion-item>
+        </div>
 
-
-
+        <div class="action-button ion-padding">
           <ion-row>
-            <ion-col size="10" offset="1">
+            <ion-col size="6" offset="3">
               <ion-button type="button" expand="block">Agregar Recinto</ion-button>
             </ion-col>
           </ion-row>
+        </div>
 
-        </ion-list>
-      </ion-item>
+        <!---------------------------------------------- END-RECINTO ----------------------------------------------->
 
-      <ion-item-divider>
+        <ion-item-divider>INFORMACIÓN GENERAL</ion-item-divider>
+        <!---------------------------------------------- INFO GENERAL ----------------------------------------------->
 
-      </ion-item-divider>
-
-
-
-      <ion-item lines="none">
-        <ion-label position="floating">Nombre del evento.</ion-label>
-        <ion-input class="input" formControlName="nameEvent" type="text" required>
-        </ion-input>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-label position="floating">Fecha Inicio.</ion-label>
-        <ion-datetime formControlName="dateEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
-          placeholder="Select Date" required>
-        </ion-datetime>
-      </ion-item>
-
-      <ion-item lines="none">
-        <ion-label position="floating">Fecha Termino.</ion-label>
-        <ion-datetime formControlName="dateEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
-          placeholder="Select Date" required>
-        </ion-datetime>
-      </ion-item>
-
-      <ion-item>
-        <ion-label position="floating">Artistas.</ion-label>
-        <ion-select multiple="true">
-          <ion-select-option *ngFor="let artista of artistas" [value]="artista">{{artista.name}}</ion-select-option>
-        </ion-select>
-      </ion-item>
-
-
-      <ion-item>
-        <ion-list>
+        <div class="formInput">
           <ion-item>
-            <ion-label position="floating">Nombre.</ion-label>
-            <ion-input class="input" type="text"></ion-input>
+            <ion-label position="floating">ID.</ion-label>
+            <ion-input formControlName="id" type="text"></ion-input>
           </ion-item>
+        </div>
 
+
+        <div class="formInput">
           <ion-item>
-            <ion-label position="floating">Descripcion.</ion-label>
-            <ion-input class="input" type="text"></ion-input>
+            <ion-label position="floating">Nombre del evento.</ion-label>
+            <ion-input formControlName="nameEvent" type="text" required>
+            </ion-input>
           </ion-item>
+        </div>
 
+
+        <div class="formInput">
+          <ion-item lines="none">
+            <ion-label position="floating">Tipo de evento.</ion-label>
+            <ion-input formControlName="typeEvent" type="text" required>
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <div class="formInput">
           <ion-item>
-            <ion-label position="floating">Categoria.</ion-label>
-            <ion-input class="input" type="text"></ion-input>
+            <ion-label position="floating">Porcentaje de Comisión.</ion-label>
+            <ion-input formControlName="percentageComission" type="text" required>
+            </ion-input>
           </ion-item>
+        </div>
 
-          <ion-row>
-            <ion-col size="10" offset="1">
-              <ion-button type="button" expand="block">Agregar Artista</ion-button>
-            </ion-col>
-          </ion-row>
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Disponibilidad.</ion-label>
+            <ion-input formControlName="nameEvent" type="text" required>
+            </ion-input>
+          </ion-item>
+        </div>
 
-        </ion-list>
-      </ion-item>
-      <ion-item-divider>
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Descripción.</ion-label>
+            <ion-input formControlName="briefDescription" type="text" required>
+            </ion-input>
+          </ion-item>
+        </div>
 
-      </ion-item-divider>
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Categorias.</ion-label>
+            <ion-select formControlName="category">
+              <ion-select-option *ngFor="let category of categories" [value]="category">{{category.categoryName}}
+              </ion-select-option>
+            </ion-select>
+          </ion-item>
+        </div>
 
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Numero de Cortesias.</ion-label>
+            <ion-input type="text" formControlName="cortesyAmount"></ion-input>
+          </ion-item>
+        </div>
 
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Fecha Inicio.</ion-label>
+            <ion-datetime formControlName="dateStartEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
+              placeholder="Select Date" required>
+            </ion-datetime>
+          </ion-item>
+        </div>
 
-      <ion-item lines="none">
-        <ion-label position="floating">Tipo de evento.</ion-label>
-        <ion-input class="input" formControlName="typeEvent" type="text" required>
-        </ion-input>
-      </ion-item>
-    </form>
-  </ion-list>
+        <div class="formInput">
+          <ion-item>
+            <ion-label position="floating">Fecha Termino.</ion-label>
+            <ion-datetime formControlName="dateEndEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
+              placeholder="Select Date" required>
+            </ion-datetime>
+          </ion-item>
+        </div>
 
-  <ion-row>
-    <ion-col size="10" offset="1">
-      <ion-button type="submit" expand="block">Add</ion-button>
-    </ion-col>
-  </ion-row>
+        <!---------------------------------------------- END-INFO----------------------------------------------->
+      </form>
 
+      <div class="action-button ion-padding">
+        <ion-row>
+          <ion-col size="6" offset="3">
+            <ion-button type="submit" expand="block">Add</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+  </div>
 </ion-content>
