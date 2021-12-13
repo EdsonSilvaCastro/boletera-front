@@ -12,7 +12,6 @@ export class Fairground {
   fairgroundLongitud: any;
   fairgroundName: any;
   fairgroundZipCode: any;
-  id: any;
   sequence: any;
 }
 

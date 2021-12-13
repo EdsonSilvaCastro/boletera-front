@@ -44,15 +44,16 @@ export class LoadVenuePage implements OnInit {
       weekDay: [''],
       id: [''],
       placeEvent: [''],
-      idFairground: [''],
-      fairgroundName: [''],
-      sequence: [''],
-      fairgroundZipCode: [''],
-      fairgroundLatitude: [''],
-      fairgroundLongitud: [''],
-      fairgroundStreet: [''],
-      fairgroundExternalNumber: [''],
-      fairgroundInternalNumber: [''],
+      fairground: this.formBuilder.group({
+        fairgroundStreet: [''],
+        fairgroundExternalNumber: [''],
+        fairgroundInternalNumber: [''],
+        fairgroundLatitude: [''],
+        fairgroundLongitud: [''],
+        fairgroundName: [''],
+        fairgroundZipCode: [''],
+        sequence: ['']
+      }),
       nameEvent: [''],
       dateEvent: [''],
       artistas: [''],
@@ -137,15 +138,18 @@ export class LoadVenuePage implements OnInit {
       (response) => {
         let newValues = Object(response);
         this.venueForm.patchValue({
-          idFairground: newValues.id,
-          fairgroundName: newValues.fairgroundName,
-          sequence: newValues.sequence,
-          fairgroundZipCode: newValues.fairgroundZipCode,
-          fairgroundLatitude: newValues.fairgroundLatitude,
-          fairgroundLongitud: newValues.fairgroundLongitud,
-          fairgroundStreet: newValues.fairgroundStreet,
-          fairgroundExternalNumber: newValues.fairgroundExternalNumber,
-          fairgroundInternalNumber: newValues.fairgroundInternalNumber,
+
+          fairground:{
+            id: newValues.id,
+            fairgroundName: newValues.fairgroundName,
+            sequence: newValues.sequence,
+            fairgroundZipCode: newValues.fairgroundZipCode,
+            fairgroundLatitude: newValues.fairgroundLatitude,
+            fairgroundLongitud: newValues.fairgroundLongitud,
+            fairgroundStreet: newValues.fairgroundStreet,
+            fairgroundExternalNumber: newValues.fairgroundExternalNumber,
+            fairgroundInternalNumber: newValues.fairgroundInternalNumber,
+          }
         });
       },
       (error) => {
@@ -156,7 +160,7 @@ export class LoadVenuePage implements OnInit {
 
   addNewArtist() {
 
-    let data= this.venueForm.get('artist').value;
+    let data = this.venueForm.get('artist').value;
     console.log(data);
     if (!this.venueForm.get('artist').valid) {
       return false;
@@ -171,5 +175,23 @@ export class LoadVenuePage implements OnInit {
         });
     }
 
+  }
+
+
+  addNewFairground(){
+    let data = this.venueForm.get('fairground').value;
+    console.log(data);
+    if (!this.venueForm.get('fairground').valid) {
+      return false;
+    } else {
+      this.fairgroundCrudService
+        .createFairground(data)
+        .subscribe((response) => {
+          this.zone.run(() => {
+            this.venueForm.get('fairground').reset();
+            console.log('success');
+          });
+        });
+    }
   }
 }
