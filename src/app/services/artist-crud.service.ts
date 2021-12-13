@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 export class Artist {
-  id: number;
   name: string;
   descripton: string;
   category: string;
@@ -28,7 +27,7 @@ export class ArtistCrudService {
 
   getArtist(id): Observable<Artist[]> {
     return this.httpClient
-      .get<Artist[]>('http://localhost:4000/api/fetch-artist/' + id)
+      .get<Artist[]>('http://sharkathon.one:8182/v1/api/artists' + id)
       .pipe(
         tap((_) => console.log(`Artist fetched: ${id}`)),
         catchError(this.handleError<Artist[]>(`Get artist id=${id}`))

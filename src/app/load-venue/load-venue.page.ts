@@ -34,10 +34,12 @@ export class LoadVenuePage implements OnInit {
     private categoryCrudService: CategoryCrudService
   ) {
     this.venueForm = this.formBuilder.group({
-      nameArtist: [''],
-      descriptionArtist: [''],
-      categoryArtist: [''],
-      durationInHours:  [''],
+      artist: this.formBuilder.group({
+        name: [''],
+        description: [''],
+        category: [''],
+      }),
+      durationInHours: [''],
       startHour: [''],
       weekDay: [''],
       id: [''],
@@ -59,10 +61,9 @@ export class LoadVenuePage implements OnInit {
       availability: [''],
       briefDescription: [''],
       category: [''],
-      cortesyAmount:[''],
-      dateStartEvent:[''],
-      dateEndEvent:['']
-
+      cortesyAmount: [''],
+      dateStartEvent: [''],
+      dateEndEvent: [''],
     });
   }
 
@@ -113,8 +114,7 @@ export class LoadVenuePage implements OnInit {
     );
   }
 
-
-  getCategories(){
+  getCategories() {
     this.categoryCrudService.getCategories().subscribe(
       (response) => {
         console.log('response', response);
@@ -124,8 +124,6 @@ export class LoadVenuePage implements OnInit {
         console.log('error', error);
       }
     );
-
-
   }
 
   loadInfo() {
@@ -137,12 +135,8 @@ export class LoadVenuePage implements OnInit {
 
     this.fairgroundCrudService.getFairground(idToget).subscribe(
       (response) => {
-
-        let newValues =Object(response);
+        let newValues = Object(response);
         this.venueForm.patchValue({
-
-
-
           idFairground: newValues.id,
           fairgroundName: newValues.fairgroundName,
           sequence: newValues.sequence,
@@ -151,9 +145,7 @@ export class LoadVenuePage implements OnInit {
           fairgroundLongitud: newValues.fairgroundLongitud,
           fairgroundStreet: newValues.fairgroundStreet,
           fairgroundExternalNumber: newValues.fairgroundExternalNumber,
-          fairgroundInternalNumber: newValues.fairgroundInternalNumber
-
-
+          fairgroundInternalNumber: newValues.fairgroundInternalNumber,
         });
       },
       (error) => {
@@ -162,29 +154,22 @@ export class LoadVenuePage implements OnInit {
     );
   }
 
+  addNewArtist() {
 
-  addNewArtist(){
-
-    const artistForm = this.formBuilder.group({
-      nameArtist: [''],
-      descriptionArtist: [''],
-      categoryArtist: ['']
-    });
-
-    console.log(artistForm.value);
-    if (!artistForm.valid) {
+    let data= this.venueForm.get('artist').value;
+    console.log(data);
+    if (!this.venueForm.get('artist').valid) {
       return false;
     } else {
       this.artistCrudService
-        .createArtist(artistForm.value)
+        .createArtist(data)
         .subscribe((response) => {
           this.zone.run(() => {
-            artistForm.reset();
+            this.venueForm.get('artist').reset();
             console.log('success');
           });
         });
     }
-
 
   }
 }
