@@ -1,3 +1,5 @@
+/* eslint-disable no-var */
+/* eslint-disable no-trailing-spaces */
 /* eslint-disable prefer-const */
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Component, OnInit, NgZone } from '@angular/core';
@@ -8,6 +10,7 @@ import { VenueCrudService } from './../services/venue-crud.service';
 import { ArtistCrudService } from '../services/artist-crud.service';
 import { FairgroundCrudService } from '../services/fairground-service.service';
 import { CategoryCrudService } from '../services/category-service.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-load-venue',
@@ -22,6 +25,7 @@ export class LoadVenuePage implements OnInit {
   artistas: any;
   categories: any;
   info: any;
+  currentSelection: string;
   //Info del recinto
 
   constructor(
@@ -31,7 +35,8 @@ export class LoadVenuePage implements OnInit {
     private venueCrudService: VenueCrudService,
     private artistCrudService: ArtistCrudService,
     private fairgroundCrudService: FairgroundCrudService,
-    private categoryCrudService: CategoryCrudService
+    private categoryCrudService: CategoryCrudService,
+    public alertController: AlertController
   ) {
     this.venueForm = this.formBuilder.group({
       artist: this.formBuilder.group({
@@ -39,11 +44,17 @@ export class LoadVenuePage implements OnInit {
         description: [''],
         category: [''],
       }),
-      durationInHours: [''],
-      startHour: [''],
-      weekDay: [''],
-      id: [''],
-      placeEvent: [''],
+      availability: [''],
+      briefDescription: [''],
+      category: [''],
+      cortesyAmount: [''],
+      dateStartEvent: [''],
+      dateEndEvent: [''],
+      eventSchedule: this.formBuilder.group({
+        durationInHours: [''],
+        startHour: [''],
+        weekDay: [''],
+      }),
       fairground: this.formBuilder.group({
         fairgroundStreet: [''],
         fairgroundExternalNumber: [''],
@@ -52,21 +63,14 @@ export class LoadVenuePage implements OnInit {
         fairgroundLongitud: [''],
         fairgroundName: [''],
         fairgroundZipCode: [''],
-        sequence: ['']
+        sequence: [''],
       }),
       nameEvent: [''],
-      dateEvent: [''],
-      artistas: [''],
-      typeEvent: [''],
       percentageComission: [''],
-      availability: [''],
-      briefDescription: [''],
-      category: [''],
-      cortesyAmount: [''],
-      dateStartEvent: [''],
-      dateEndEvent: [''],
     });
   }
+
+
 
   ngOnInit() {
     this.getRecintos();
@@ -76,6 +80,7 @@ export class LoadVenuePage implements OnInit {
 
   onSubmit() {
     console.log(this.venueForm.value);
+
     if (!this.venueForm.valid) {
       return false;
     } else {
@@ -128,9 +133,9 @@ export class LoadVenuePage implements OnInit {
   }
 
   loadInfo() {
-    this.info = this.venueForm.value;
+    this.info = this.venueForm.get('fairground').value;
 
-    let idSearch = Object(this.info.placeEvent);
+    let idSearch = Object(this.info.fairgroundName);
     let values = Object.values(idSearch);
     let idToget = values[0];
 
@@ -138,10 +143,7 @@ export class LoadVenuePage implements OnInit {
       (response) => {
         let newValues = Object(response);
         this.venueForm.patchValue({
-
-          fairground:{
-            id: newValues.id,
-            fairgroundName: newValues.fairgroundName,
+          fairground: {
             sequence: newValues.sequence,
             fairgroundZipCode: newValues.fairgroundZipCode,
             fairgroundLatitude: newValues.fairgroundLatitude,
@@ -149,7 +151,7 @@ export class LoadVenuePage implements OnInit {
             fairgroundStreet: newValues.fairgroundStreet,
             fairgroundExternalNumber: newValues.fairgroundExternalNumber,
             fairgroundInternalNumber: newValues.fairgroundInternalNumber,
-          }
+          },
         });
       },
       (error) => {
@@ -159,39 +161,118 @@ export class LoadVenuePage implements OnInit {
   }
 
   addNewArtist() {
-
     let data = this.venueForm.get('artist').value;
     console.log(data);
     if (!this.venueForm.get('artist').valid) {
       return false;
     } else {
-      this.artistCrudService
-        .createArtist(data)
-        .subscribe((response) => {
-          this.zone.run(() => {
-            this.venueForm.get('artist').reset();
-            console.log('success');
-          });
+      this.artistCrudService.createArtist(data).subscribe((response) => {
+        this.zone.run(() => {
+          this.venueForm.get('artist').reset();
+          console.log('success');
         });
+      });
     }
+  }
+
+  addNewFairground(newOne) {
+
+    this.fairgroundCrudService
+      .createFairground(newOne)
+      .subscribe((response) => {
+        this.zone.run(() => {
+          console.log('success from outside');
+        });
+      });
 
   }
 
 
-  addNewFairground(){
-    let data = this.venueForm.get('fairground').value;
-    console.log(data);
-    if (!this.venueForm.get('fairground').valid) {
-      return false;
-    } else {
-      this.fairgroundCrudService
-        .createFairground(data)
-        .subscribe((response) => {
-          this.zone.run(() => {
-            this.venueForm.get('fairground').reset();
-            console.log('success');
-          });
-        });
-    }
+
+  async inputCustomFairground() {
+    await this.alertController.create({
+      header: 'Ingrese los datos:',
+      inputs: [
+        {
+          type: 'text',
+          name: 'newFairground',
+          label: 'Nombre del lugar.',
+          placeholder: 'Nombre del lugar.'
+        },
+        {
+          type: 'text',
+          name: 'newSequence',
+          label: 'Secuencia.',
+          placeholder: 'Secuencia.'
+        },
+        {
+          type: 'text',
+          name: 'newZipcode',
+          label: 'Codigo postal.',
+          placeholder: 'Codigo postal.'
+        },
+        {
+          type: 'text',
+          name: 'newLatitude',
+          label: 'Latitud.',
+          placeholder: 'Latitud.'
+        },
+        {
+          type: 'text',
+          name: 'newLongitud',
+          label: 'Longitud.',
+          placeholder: 'Longitud.'
+        },
+        {
+          type: 'text',
+          name: 'newAddress',
+          label: 'Dirección.',
+          placeholder: 'Dirección.'
+        },
+        {
+          type: 'text',
+          name: 'newExternalNumber',
+          label: 'Numero Exterior.',
+          placeholder: 'Numero Exterior.'
+        },
+        {
+          type: 'text',
+          name: 'newInternalNumber',
+          label: 'Numero Interior.',
+          placeholder: 'Numero Interior.'
+        }
+
+
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Ok', handler: (res) => {
+
+            var item = {
+
+              fairgroundStreet: res.newAddress,
+              fairgroundExternalNumber: res.newExternalNumber,
+              fairgroundInternalNumber: res.newInternalNumber,
+              fairgroundLatitude: res.newLatitude,
+              fairgroundLongitud: res.newLongitud,
+              fairgroundName: res.newFairground,
+              fairgroundZipCode: res.newZipcode,
+              sequence: res.newSequence
+
+            };
+
+            console.log(item);
+
+            this.addNewFairground(item);
+
+          }
+        }],
+    }).then(res => res.present());
+
+
   }
+
 }

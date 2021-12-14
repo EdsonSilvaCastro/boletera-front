@@ -9,7 +9,7 @@
     <div class="formContainer ion-padding">
       <h1>Ingrese los datos requeridos.</h1>
       <!---------------------------------------------- MAIN FORM ----------------------------------------------->
-      <form [formGroup]="venueForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="venueForm">
         <ion-item-divider>ARTISTAS</ion-item-divider>
 
 
@@ -53,7 +53,7 @@
         <div class="action-button ion-padding">
           <ion-row>
             <ion-col size="6" offset="3">
-              <ion-button  expand="block" (click) ="addNewArtist()" >Agregar Artista</ion-button>
+              <ion-button expand="block" (click)="addNewArtist()">Agregar Artista</ion-button>
             </ion-col>
           </ion-row>
         </div>
@@ -62,29 +62,33 @@
 
         <ion-item-divider>HORARIO</ion-item-divider>
 
-        <div class="formInput">
-          <ion-item>
-            <ion-label position="floating">Duracion en horas.</ion-label>
-            <ion-input formControlName="durationInHours" type="text"></ion-input>
-          </ion-item>
-        </div>
+        <div formGroupName="eventSchedule">
+
+          <div class="formInput">
+            <ion-item>
+              <ion-label position="floating">Duracion en horas.</ion-label>
+              <ion-input formControlName="durationInHours" type="text"></ion-input>
+            </ion-item>
+          </div>
 
 
-        <div class="formInput">
-          <ion-item>
-            <ion-label position="floating">Fecha y hora de inicio.</ion-label>
-            <ion-datetime formControlName="startHour" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
-              placeholder="Select Date" required>
-            </ion-datetime>
-          </ion-item>
-        </div>
+          <div class="formInput">
+            <ion-item>
+              <ion-label position="floating">Fecha y hora de inicio.</ion-label>
+              <ion-datetime formControlName="startHour" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
+                placeholder="Select Date">
+              </ion-datetime>
+            </ion-item>
+          </div>
 
 
-        <div class="formInput">
-          <ion-item>
-            <ion-label position="floating">Dia de la semana.</ion-label>
-            <ion-input formControlName="weekDay" type="text"></ion-input>
-          </ion-item>
+          <div class="formInput">
+            <ion-item>
+              <ion-label position="floating">Dia de la semana.</ion-label>
+              <ion-input formControlName="weekDay" type="text"></ion-input>
+            </ion-item>
+          </div>
+
         </div>
 
         <!---------------------------------------------- DATOS RECINTO ----------------------------------------------->
@@ -92,23 +96,17 @@
         <ion-item-divider>RECINTO</ion-item-divider>
 
 
-        <div class="formInput">
-          <ion-item>
-            <ion-label position="floating">Lugar del evento.</ion-label>
-            <ion-select formControlName="placeEvent" (ionChange)="loadInfo()">
-              <ion-select-option *ngFor="let recinto of recintos" [value]="recinto">{{recinto.fairgroundName}}
-              </ion-select-option>
-            </ion-select>
-          </ion-item>
-        </div>
+
 
         <div formGroupName="fairground">
 
 
           <div class="formInput">
             <ion-item>
-              <ion-label position="floating">Nombre.</ion-label>
-              <ion-input type="text" formControlName="fairgroundName"></ion-input>
+              <ion-label position="floating">Lugar del evento.</ion-label>
+              <ion-select formControlName="fairgroundName" (ionChange)="loadInfo()">
+                <ion-select-option *ngFor="let recinto of recintos" [value]="recinto">{{recinto.fairgroundName}}</ion-select-option>
+              </ion-select>
             </ion-item>
           </div>
 
@@ -168,7 +166,7 @@
         <div class="action-button ion-padding">
           <ion-row>
             <ion-col size="6" offset="3">
-              <ion-button (click) ="addNewFairground()" expand="block">Agregar Recinto</ion-button>
+              <ion-button (click)="inputCustomFairground()" expand="block">Agregar Recinto</ion-button>
             </ion-col>
           </ion-row>
         </div>
@@ -180,33 +178,17 @@
 
         <div class="formInput">
           <ion-item>
-            <ion-label position="floating">ID.</ion-label>
-            <ion-input formControlName="id" type="text"></ion-input>
-          </ion-item>
-        </div>
-
-
-        <div class="formInput">
-          <ion-item>
             <ion-label position="floating">Nombre del evento.</ion-label>
-            <ion-input formControlName="nameEvent" type="text" required>
+            <ion-input formControlName="nameEvent" type="text">
             </ion-input>
           </ion-item>
         </div>
 
-
-        <div class="formInput">
-          <ion-item lines="none">
-            <ion-label position="floating">Tipo de evento.</ion-label>
-            <ion-input formControlName="typeEvent" type="text" required>
-            </ion-input>
-          </ion-item>
-        </div>
 
         <div class="formInput">
           <ion-item>
             <ion-label position="floating">Porcentaje de Comisión.</ion-label>
-            <ion-input formControlName="percentageComission" type="text" required>
+            <ion-input formControlName="percentageComission" type="text">
             </ion-input>
           </ion-item>
         </div>
@@ -214,7 +196,7 @@
         <div class="formInput">
           <ion-item>
             <ion-label position="floating">Disponibilidad.</ion-label>
-            <ion-input formControlName="nameEvent" type="text" required>
+            <ion-input formControlName="availability" type="text">
             </ion-input>
           </ion-item>
         </div>
@@ -222,7 +204,7 @@
         <div class="formInput">
           <ion-item>
             <ion-label position="floating">Descripción.</ion-label>
-            <ion-input formControlName="briefDescription" type="text" required>
+            <ion-input formControlName="briefDescription" type="text">
             </ion-input>
           </ion-item>
         </div>
@@ -248,7 +230,7 @@
           <ion-item>
             <ion-label position="floating">Fecha Inicio.</ion-label>
             <ion-datetime formControlName="dateStartEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
-              placeholder="Select Date" required>
+              placeholder="Select Date">
             </ion-datetime>
           </ion-item>
         </div>
@@ -257,7 +239,7 @@
           <ion-item>
             <ion-label position="floating">Fecha Termino.</ion-label>
             <ion-datetime formControlName="dateEndEvent" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
-              placeholder="Select Date" required>
+              placeholder="Select Date">
             </ion-datetime>
           </ion-item>
         </div>
@@ -268,7 +250,7 @@
       <div class="action-button ion-padding">
         <ion-row>
           <ion-col size="6" offset="3">
-            <ion-button type="submit" expand="block">Add</ion-button>
+            <ion-button (click)="onSubmit()" expand="block">Add</ion-button>
           </ion-col>
         </ion-row>
       </div>
