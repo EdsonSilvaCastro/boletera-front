@@ -18,42 +18,17 @@
         <div class="formInput">
           <ion-item>
             <ion-label position="floating">Artistas.</ion-label>
-            <ion-select multiple="true">
+            <ion-select multiple="true" formControlName="artists">
               <ion-select-option *ngFor="let artista of artistas" [value]="artista">{{artista.name}}</ion-select-option>
             </ion-select>
           </ion-item>
         </div>
 
 
-        <div formGroupName="artist">
-          <div class="formInput">
-            <ion-item>
-              <ion-label position="floating">Nombre.</ion-label>
-              <ion-input formControlName="name" type="text"></ion-input>
-            </ion-item>
-          </div>
-
-          <div class="formInput">
-            <ion-item>
-              <ion-label position="floating">Descripcion.</ion-label>
-              <ion-input formControlName="description" type="text"></ion-input>
-            </ion-item>
-          </div>
-
-          <div class="formInput">
-            <ion-item>
-              <ion-label position="floating">Categoria.</ion-label>
-              <ion-input formControlName="category" type="text"></ion-input>
-            </ion-item>
-          </div>
-
-
-        </div>
-
         <div class="action-button ion-padding">
           <ion-row>
             <ion-col size="6" offset="3">
-              <ion-button expand="block" (click)="addNewArtist()">Agregar Artista</ion-button>
+              <ion-button expand="block" (click)="inputCustomArtist()">Agregar Artista</ion-button>
             </ion-col>
           </ion-row>
         </div>
@@ -62,34 +37,55 @@
 
         <ion-item-divider>HORARIO</ion-item-divider>
 
-        <div formGroupName="eventSchedule">
+        <div formArrayName="eventSchedules" *ngFor="let eventSchedule of venueForm.get('eventSchedules')['controls']; let i = index">
+        <div [formGroupName]="i">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <div class="formInput">
+                  <ion-item>
+                    <ion-label position="floating">Duracion en horas.</ion-label>
+                    <ion-input formControlName="durationInHours" type="text"></ion-input>
+                  </ion-item>
+                </div>
 
-          <div class="formInput">
-            <ion-item>
-              <ion-label position="floating">Duracion en horas.</ion-label>
-              <ion-input formControlName="durationInHours" type="text"></ion-input>
-            </ion-item>
-          </div>
+              </ion-col>
 
+              <ion-col>
+                <div class="formInput">
+                  <ion-item>
+                    <ion-label position="floating">Fecha y hora de inicio.</ion-label>
+                    <ion-datetime formControlName="startHour" min="2021" max="2025-12-31"
+                      displayFormat="D MMM YYYY H:mm" placeholder="Select Date">
+                    </ion-datetime>
+                  </ion-item>
+                </div>
+              </ion-col>
 
-          <div class="formInput">
-            <ion-item>
-              <ion-label position="floating">Fecha y hora de inicio.</ion-label>
-              <ion-datetime formControlName="startHour" min="2021" max="2025-12-31" displayFormat="D MMM YYYY H:mm"
-                placeholder="Select Date">
-              </ion-datetime>
-            </ion-item>
-          </div>
+              <ion-col>
+                <div class="formInput">
+                  <ion-item>
+                    <ion-label position="floating">Dia de la semana.</ion-label>
+                    <ion-input formControlName="weekDay" type="text"></ion-input>
+                  </ion-item>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
 
-
-          <div class="formInput">
-            <ion-item>
-              <ion-label position="floating">Dia de la semana.</ion-label>
-              <ion-input formControlName="weekDay" type="text"></ion-input>
-            </ion-item>
-          </div>
 
         </div>
+
+
+        <div class="action-button ion-padding">
+          <ion-row>
+            <ion-col size="6" offset="3">
+              <ion-button expand="block" (click)="addHorarioButtonClick()">Agregar Horario.</ion-button>
+            </ion-col>
+          </ion-row>
+        </div>
+
 
         <!---------------------------------------------- DATOS RECINTO ----------------------------------------------->
         <h1> </h1>
@@ -105,7 +101,8 @@
             <ion-item>
               <ion-label position="floating">Lugar del evento.</ion-label>
               <ion-select formControlName="fairgroundName" (ionChange)="loadInfo()">
-                <ion-select-option *ngFor="let recinto of recintos" [value]="recinto">{{recinto.fairgroundName}}</ion-select-option>
+                <ion-select-option *ngFor="let recinto of recintos" [value]="recinto">{{recinto.fairgroundName}}
+                </ion-select-option>
               </ion-select>
             </ion-item>
           </div>

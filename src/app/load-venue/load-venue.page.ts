@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 /* eslint-disable no-var */
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable prefer-const */
@@ -5,12 +6,13 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { Component, OnInit, NgZone } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { VenueCrudService } from './../services/venue-crud.service';
 import { ArtistCrudService } from '../services/artist-crud.service';
 import { FairgroundCrudService } from '../services/fairground-service.service';
 import { CategoryCrudService } from '../services/category-service.service';
 import { AlertController } from '@ionic/angular';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-load-venue',
@@ -39,22 +41,14 @@ export class LoadVenuePage implements OnInit {
     public alertController: AlertController
   ) {
     this.venueForm = this.formBuilder.group({
-      artist: this.formBuilder.group({
-        name: [''],
-        description: [''],
-        category: [''],
-      }),
+      artists: [''],
       availability: [''],
       briefDescription: [''],
       category: [''],
       cortesyAmount: [''],
       dateStartEvent: [''],
       dateEndEvent: [''],
-      eventSchedule: this.formBuilder.group({
-        durationInHours: [''],
-        startHour: [''],
-        weekDay: [''],
-      }),
+      eventSchedules:this.formBuilder.array([ this.addHorarioFormGroup()]),
       fairground: this.formBuilder.group({
         fairgroundStreet: [''],
         fairgroundExternalNumber: [''],
@@ -77,6 +71,15 @@ export class LoadVenuePage implements OnInit {
     this.getArtistas();
     this.getCategories();
   }
+
+  addHorarioButtonClick(): void{
+
+  (<FormArray>this.venueForm.get('eventSchedules')).push(this.addHorarioFormGroup());
+
+  }
+
+
+
 
   onSubmit() {
     console.log(this.venueForm.value);
@@ -144,6 +147,7 @@ export class LoadVenuePage implements OnInit {
         let newValues = Object(response);
         this.venueForm.patchValue({
           fairground: {
+            fairgroundName: newValues.fairgroundName,
             sequence: newValues.sequence,
             fairgroundZipCode: newValues.fairgroundZipCode,
             fairgroundLatitude: newValues.fairgroundLatitude,
@@ -160,19 +164,15 @@ export class LoadVenuePage implements OnInit {
     );
   }
 
-  addNewArtist() {
-    let data = this.venueForm.get('artist').value;
-    console.log(data);
-    if (!this.venueForm.get('artist').valid) {
-      return false;
-    } else {
-      this.artistCrudService.createArtist(data).subscribe((response) => {
-        this.zone.run(() => {
-          this.venueForm.get('artist').reset();
-          console.log('success');
-        });
+  addNewArtist(newArtist) {
+
+    this.artistCrudService
+    .createArtist(newArtist)
+    .subscribe((response) => {
+      this.zone.run(() => {
+        console.log('success from outside');
       });
-    }
+    });
   }
 
   addNewFairground(newOne) {
@@ -186,8 +186,6 @@ export class LoadVenuePage implements OnInit {
       });
 
   }
-
-
 
   async inputCustomFairground() {
     await this.alertController.create({
@@ -275,4 +273,62 @@ export class LoadVenuePage implements OnInit {
 
   }
 
+
+  async inputCustomArtist() {
+    await this.alertController.create({
+      header: 'Ingrese los datos:',
+      inputs: [
+        {
+          type: 'text',
+          name: 'newName',
+          label: 'Nombre',
+          placeholder: 'Nombre'
+        },
+        {
+          type: 'text',
+          name: 'newDescription',
+          label: 'Descripción',
+          placeholder: 'Descripción'
+        },
+        {
+          type: 'text',
+          name: 'newCategory',
+          label: 'Categoria',
+          placeholder: 'Categoria'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancel'
+        },
+        {
+          text: 'Ok', handler: (res) => {
+
+            var newArtist = {
+
+                category: res.newCategory,
+                description: res.newDescription,
+                name: res.newName
+
+            };
+
+            console.log(newArtist);
+
+            this.addNewArtist(newArtist);
+
+          }
+        }],
+    }).then(res => res.present());
+
+
+  }
+
+  addHorarioFormGroup(): FormGroup {
+
+   return this.formBuilder.group({
+      durationInHours: [''],
+      startHour: [''],
+      weekDay: [''],
+    });
+  }
 }
